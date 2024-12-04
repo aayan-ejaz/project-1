@@ -1,0 +1,41 @@
+MDScreen:
+    name: "main"
+    MDFloatLayout:
+        md_bg_color: 1, 1, 1, 1
+
+        Image:
+            source: "assets/Art.png"
+            size_hint: .9, .9
+            pos_hint: {"center_x": .5, "center_y": .65}
+
+        Image:
+            source: "assets/Logo.png"
+            size_hint: .9, .9
+            pos_hint: {"center_x": .5, "center_y": .300}
+
+        MDLabel:
+            text: "Experience the Perfect Fit with\nSeamless AR Technology"
+            font_size: "11sp"
+            pos_hint: {"center_y": .20}
+            halign: "center"
+            color: rgba(0, 188, 151)
+
+        Button:
+            text: "Get Started"
+            size_hint: .66, .065
+            pos_hint: {"center_x": .5, "center_y": .10}
+            background_color: 0, 0, 0, 0
+            font_name: "BPoppins"
+            on_release:
+                root.manager.transition.direction = "up"
+                root.manager.current = "login"
+            canvas.before:
+                Color:  
+                    rgb: rgba(52, 0, 231, 255)
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+                    radius: [5]
+
+
+
