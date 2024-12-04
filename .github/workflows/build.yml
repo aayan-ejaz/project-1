@@ -41,7 +41,7 @@ jobs:
 
     # Upload the built APK as an artifact
     - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: package
         path: .buildozer/android/platform/build/outputs/apk/debug/*.apk
