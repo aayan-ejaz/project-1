@@ -19,14 +19,14 @@ jobs:
 
     # Cache Buildozer global directory
     - name: Cache Buildozer global directory
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .buildozer_global
         key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
     # Cache the Buildozer working directory
     - name: Cache Buildozer working directory
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: .buildozer
         key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
