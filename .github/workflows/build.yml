@@ -8,40 +8,42 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    # Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    # Get the current date to use as part of the cache key
-    - name: Get Date
-      id: get-date
-      run: echo "date=$(date -u '+%Y%m%d')" >> $GITHUB_ENV
+      # Get the current date to use as part of the cache key
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
 
-    # Cache Buildozer global directory
-    - name: Cache Buildozer global directory
-      uses: actions/cache@v3
-      with:
-        path: .buildozer_global
-        key: buildozer-global-${{ hashFiles('buildozer.spec') }}
+      # Cache Buildozer global directory
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v2
+        with:
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
-    # Cache the Buildozer working directory
-    - name: Cache Buildozer working directory
-      uses: actions/cache@v3
-      with:
-        path: .buildozer
-        key: ${{ runner.os }}-${{ env.date }}-${{ hashFiles('buildozer.spec') }}
+      # Cache the Buildozer working directory
+      - name: Cache Buildozer working directory
+        uses: actions/cache@v2
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
 
-    # Build the app using Buildozer
-    - name: Build with Buildozer
-      uses: ArtemSBulgakov/buildozer-action@v1
-      id: buildozer
-      with:
-        command: android debug
-        buildozer_version: stable
+      # Build the app using Buildozer
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
 
-    # Upload the built APK as an artifact
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: package
-        path: .buildozer/android/platform/build/outputs/apk/debug/*.apk
+      # Upload the built APK as an artifact
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
